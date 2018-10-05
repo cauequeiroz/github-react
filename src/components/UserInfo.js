@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import { Avatar, Grid, Typography, CircularProgress } from '@material-ui/core';
+import { Avatar, Grid, Typography, CircularProgress, Divider } from '@material-ui/core';
 
 const styles = {
   card: {
@@ -11,14 +11,22 @@ const styles = {
   avatar: {
     width: 120,
     height: 120,
-    marginRight: 48
+    marginRight: 48,
+    marginBottom: 12
+  },
+  bio: {
+    maxWidth: 280
+  },
+  divider: {
+    margin: '12px 0',
+    width: '50%'
   },
   key: {
     display: 'inline-block',
     marginRight: 6
   },
   value: {
-    display: 'inline-block'
+    display: 'inline-block',
   },
   loading: {
     display: 'block',
@@ -60,12 +68,14 @@ const UserInfo = props => {
           <Avatar
           src={user.image}
           className={classes.avatar} />
+
+          <Typography variant="title" >{user.name}</Typography>
+          <Typography variant="subheading" >@{user.username}</Typography>
         </Grid>
 
         <Grid item>
-          <Typography variant="display1" gutterBottom>
-            {user.username}
-          </Typography>
+          <Typography className={classes.bio}>{user.bio}</Typography>
+          <Divider className={classes.divider} />
 
           {user.info.map(({key, value}) => (
             <div key={key}>

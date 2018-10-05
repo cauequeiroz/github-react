@@ -16,6 +16,7 @@ class App extends Component {
     }
 
     this.handleUserChange = this.handleUserChange.bind(this);
+    this.handleUserChange('cauequeiroz');
   }
 
   handleUserChange(user) {
@@ -31,13 +32,15 @@ class App extends Component {
 
   filterUserData(data) {
     const fields = [
-      'type', 'company', 'blog', 'location', 'email', 'bio',
+      'type', 'company', 'blog', 'location', 'email',
       'public_repos', 'public_gists', 'followers', 'following'
     ];
 
     const user = {
       image: data.avatar_url,
+      name: data.name,
       username: data.login,
+      bio: data.bio,
       info: []
     };
 
