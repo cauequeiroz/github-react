@@ -74,14 +74,16 @@ const UserInfo = props => {
         </Grid>
 
         <Grid item>
-          <Typography className={classes.bio}>{user.bio}</Typography>
-          <Divider className={classes.divider} />
+          {user.bio && (<div>
+            <Typography className={classes.bio}>{user.bio}</Typography>
+            <Divider className={classes.divider} />
+          </div>)}
 
           {user.info.map(({key, value}) => (
             <div key={key}>
               <Typography
                 variant="body2"
-                className={classes.key}>[{key}]</Typography>
+                className={classes.key}>{key}:</Typography>
               <Typography
                 className={classes.value}>{value}</Typography>
             </div>

@@ -3,6 +3,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import SearchBar from './components/SearchBar';
 import UserInfo from './components/UserInfo';
+import ReposPanel from './components/ReposPanel';
+import GithubAPI from './services/GithubAPI';
 
 library.add(fab);
 
@@ -12,47 +14,33 @@ class App extends Component {
 
     this.state = {
       user: null,
-      isLoading: false
+      repos: null,
+      isInfoLoading: false,
+      isReposLoading: false
     }
 
     this.handleUserChange = this.handleUserChange.bind(this);
+    this.handleReposOpen = this.handleReposOpen.bind(this);
+  }
+
+  componentDidMount() {
     this.handleUserChange('cauequeiroz');
   }
 
   handleUserChange(user) {
-    this.setState({ isLoading: true })
+    this.setState({ isInfoLoading: true });
 
-    fetch(`https://api.github.com/users/${user}?client_id=8504348`)
-      .then(data => data.json())
-      .then(data => {
-        const user = this.filterUserData(data);
-        this.setState({ user, isLoading: false });
-      })
+    GithubAPI.getUserInfo(user)
+      .then(user => this.setState({ user, isInfoLoading: false, repos: null }));
   }
 
-  filterUserData(data) {
-    const fields = [
-      'type', 'company', 'blog', 'location', 'email',
-      'public_repos', 'public_gists', 'followers', 'following'
-    ];
+  handleReposOpen(event, open) {
+    if (!open) return;
 
-    const user = {
-      image: data.avatar_url,
-      name: data.name,
-      username: data.login,
-      bio: data.bio,
-      info: []
-    };
+    this.setState({ isReposLoading: true });
 
-    Object.keys(data).forEach(item => {
-      if (fields.indexOf(item) !== -1) {
-        if (data[item]) {
-          user.info.push({ key: item, value: data[item] });
-        }
-      }
-    });
-
-    return user;
+    GithubAPI.getUserRepos(this.state.user.username)
+      .then(repos => this.setState({ repos, isReposLoading: false }));
   }
 
   render() {
@@ -61,8 +49,13 @@ class App extends Component {
         <SearchBar
           onChange={this.handleUserChange} />
         <UserInfo
-          loading={this.state.isLoading}
+          loading={this.state.isInfoLoading}
           user={this.state.user} />
+
+        <ReposPanel
+          loading={this.state.isReposLoading}
+          repos={this.state.repos}
+          onChange={this.handleReposOpen} />
       </div>
     );
   }
