@@ -3,7 +3,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import SearchBar from './components/SearchBar';
 import UserInfo from './components/UserInfo';
-import ReposPanel from './components/ReposPanel';
 import GithubAPI from './services/GithubAPI';
 
 library.add(fab);
@@ -24,7 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.handleUserChange('cauequeiroz');
+    // this.handleUserChange('cauequeiroz');
   }
 
   handleUserChange(user) {
@@ -51,11 +50,6 @@ class App extends Component {
         <UserInfo
           loading={this.state.isInfoLoading}
           user={this.state.user} />
-
-        <ReposPanel
-          loading={this.state.isReposLoading}
-          repos={this.state.repos}
-          onChange={this.handleReposOpen} />
       </div>
     );
   }
